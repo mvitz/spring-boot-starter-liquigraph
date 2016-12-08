@@ -18,6 +18,7 @@ package de.mvitz.liquigraph.spring;
 import org.liquigraph.core.api.Liquigraph;
 import org.liquigraph.core.configuration.Configuration;
 import org.liquigraph.core.configuration.ConfigurationBuilder;
+import org.liquigraph.core.io.xml.ChangelogLoader;
 import org.springframework.beans.factory.InitializingBean;
 
 import javax.sql.DataSource;
@@ -30,18 +31,22 @@ import javax.sql.DataSource;
 public final class SpringLiquigraph implements InitializingBean {
 
     private final DataSource dataSource;
+    private final ChangelogLoader changelogLoader;
     private final String changeLog;
 
-    public SpringLiquigraph(DataSource dataSource, String changeLog) {
+    public SpringLiquigraph(DataSource dataSource, ChangelogLoader changelogLoader,
+                            String changeLog) {
         this.dataSource = dataSource;
+        this.changelogLoader = changelogLoader;
         this.changeLog = changeLog;
     }
 
     @Override
     public void afterPropertiesSet() throws Exception {
         final Configuration configuration = new ConfigurationBuilder()
-            .withMasterChangelogLocation(changeLog)
             .withDataSource(dataSource)
+            .withChangelogLoader(changelogLoader)
+            .withMasterChangelogLocation(changeLog)
             .withRunMode()
             .build();
         new Liquigraph().runMigrations(configuration);

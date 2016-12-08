@@ -33,7 +33,7 @@ public final class LiquigraphProperties {
      * Change log configuration path.
      */
     @NotNull
-    private String changeLog = "/db/liquigraph/changelog.xml";
+    private String changeLog = "classpath:/db/liquigraph/changelog.xml";
 
     /**
      * Enable liquigraph.
